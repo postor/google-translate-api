@@ -61,18 +61,19 @@ async function translate(text, options) {
         let url = `${baseUrl}?${querystring.stringify(data)}`;
 
         let requestOptions;
+        let gotOptions = options.got || {}
         // If request URL is greater than 2048 characters, use POST method.
         if (url.length > 2048) {
             delete data.q;
             requestOptions = [
                 `${baseUrl}?${querystring.stringify(data)}`,
-                {
+                Object.assign(gotOptions, {
                     method: "POST",
                     form: true,
                     body: {
                         q: text
                     }
-                }
+                })
             ];
         }
         else {
